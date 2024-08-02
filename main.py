@@ -1,7 +1,31 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from typing import List
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
+
+html_content = """
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebSocket Documentation</title>
+    </head>
+    <body>
+        <h1>WebSocket Chat Application</h1>
+        <p>Connect to the WebSocket server at: <code>ws://localhost:8000/ws/{client_id}</code></p>
+        <ul>
+            <li><strong>Client ID:</strong> A unique identifier for each client.</li>
+            <li>Once connected, clients can send and receive messages in real-time.</li>
+            <li>All messages are broadcast to every connected client.</li>
+        </ul>
+        <p>For testing, open the <code>index.html</code> file in two separate browser windows or tabs and interact with the chat interface.</p>
+    </body>
+</html>
+"""
+
+@app.get("/")
+async def get_documentation():
+    return HTMLResponse(html_content)
 
 class ConnectionManager:
     def __init__(self):
