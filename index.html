@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>WebSocket Client</title>
+    <title>WebSocket Chat</title>
 </head>
 <body>
     <h1>WebSocket Chat</h1>
@@ -11,19 +11,20 @@
     </form>
     <ul id='messages'></ul>
     <script>
-        var ws = new WebSocket("ws://localhost:8000/ws");
-        
+        const clientId = prompt("Enter your client ID:"); // Prompt for a unique client ID
+        const ws = new WebSocket(`ws://localhost:8000/ws/${clientId}`);
+
         ws.onopen = function(e) {
             console.log("[open] Connection established");
-            // You can send an initial message here if needed
+            alert(`Connected as Client ${clientId}`);
         };
 
         ws.onmessage = function(event) {
-            var messages = document.getElementById('messages')
-            var message = document.createElement('li')
-            var content = document.createTextNode(event.data)
-            message.appendChild(content)
-            messages.appendChild(message)
+            const messages = document.getElementById('messages');
+            const message = document.createElement('li');
+            const content = document.createTextNode(event.data);
+            message.appendChild(content);
+            messages.appendChild(message);
         };
 
         ws.onclose = function(event) {
@@ -39,10 +40,10 @@
         };
 
         function sendMessage(event) {
-            var input = document.getElementById("messageText")
-            ws.send(input.value)
-            input.value = ''
-            event.preventDefault()
+            const input = document.getElementById("messageText");
+            ws.send(input.value);
+            input.value = '';
+            event.preventDefault();
         }
     </script>
 </body>
